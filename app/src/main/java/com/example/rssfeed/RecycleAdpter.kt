@@ -3,6 +3,7 @@ package com.example.rssfeed
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -22,23 +23,22 @@ class RecycleAdpter(var listQ :List<Questions>, var context : Context) : Recycle
             tvQue.text = list[position].title
             tvAuther.text = list[position].author
         }
-        holder.itemView.setOnClickListener {
-            showAlert(list[position].summary)
-        }
+       
     }
-
-    private fun showAlert(summary : String) {
-        val dial = AlertDialog.Builder(context)
-        dial.setMessage("Det")
-            .setPositiveButton("OK",DialogInterface.OnClickListener { dialogInterface, _ -> dialogInterface.cancel()  })
-        val tvSummary = TextView(context)
-        tvSummary.text = summary
-        val alert = dial.create()
-        alert.setView(tvSummary)
-        alert.show()
-
-
-    }
+//
+//    private fun showAlert(summary : String) {
+//        Log.e("enter","alert")
+//        val dial = AlertDialog.Builder(context)
+//        dial.setMessage("Det")
+//            .setPositiveButton("OK",DialogInterface.OnClickListener { dialogInterface, _ -> dialogInterface.cancel()  })
+//        val tvSummary = TextView(context)
+//        tvSummary.text = summary
+//        val alert = dial.create()
+//        alert.setView(tvSummary)
+//        alert.show()
+//
+//
+//    }
 
     override fun getItemCount(): Int = listQ.size
 }

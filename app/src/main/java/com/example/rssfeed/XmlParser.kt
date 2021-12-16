@@ -24,35 +24,27 @@ class XmlParser {
             var insideEntry = false
             var eventType = parser.eventType
             while (eventType != XmlPullParser.END_DOCUMENT) {
-                val tagName = parser.name
-                when (eventType) {
-                    XmlPullParser.TEXT -> text = parser.text
-                    XmlPullParser.END_TAG -> when {
-                        tagName.equals("title", true) -> {
-                            Log.e("insade title", insideEntry.toString())
-                                title = text
-                                println(title)
-                        }
-                        tagName.equals("author", true) -> {
-                          if (tagName.equals("name",true)) {
-
-                              author = text
-                              Log.e("name", author)
-                          }
-                        }
-                        tagName.equals("summary ", true) -> {
-
-                                summary = text
-                        }
-                        else -> {
-                            listQuestions.add(Questions(title, author, summary))
-                            Log.e("title", title)
-                        }
+                if (eventType == XmlPullParser.START_TAG) {
+                    if (parser.name.equals("entry",true)) {
+                        insideEntry = true;
+                    } else if (parser.name.equals("title",true)) {
+                        if (insideEntry)
+                            title = parser.nextText()
+                    } else if (parser.name.equals("name",true)) {
+                        if (insideEntry)
+                             author = parser.nextText()
                     }
-                    else -> {
-
+                    else if (parser.name.equals("summary", true)) {
+                        if (insideEntry)
+                             summary = parser.nextText()
                     }
+
+
+                } else if (eventType == XmlPullParser.END_TAG && parser.name.equals("entry",true)) {
+                    insideEntry = false;
+                    listQuestions.add(Questions(title,author,summary))
                 }
+
                 eventType = parser.next()
             }
         } catch (e: XmlPullParserException) {

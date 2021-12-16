@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var listQuestions: List<Questions>
+    lateinit var data : List<Questions>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,18 +32,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun parseRSS() {
         CoroutineScope(IO).launch {
-            val data = async {
+             data = async {
                 val parser = XmlParser()
                 parser.parse()
             }.await()
             try{
                 withContext(Main){
-                    binding.recycle.adapter = RecycleAdpter(data , applicationContext)
-                    binding.recycle.adapter?.notifyDataSetChanged()
+                   initRV()
                 }
             }catch(e: java.lang.Exception){
                 Log.d("MAIN", "Unable to get data")
             }
         }
+    }
+
+    private fun initRV() {
+        binding.recycle.adapter = RecycleAdpter(data , applicationContext)
+        binding.recycle.adapter?.notifyDataSetChanged()
     }
 }
