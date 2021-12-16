@@ -1,0 +1,40 @@
+            var insideEntry = false
+            var eventType = parser.eventType
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                val tagName = parser.name
+                when (eventType) {
+                    XmlPullParser.TEXT -> text = parser.text
+                    XmlPullParser.END_TAG -> when {
+                        tagName.equals("entry", true) -> {
+                            insideEntry = true
+                            Log.e("insade enty", insideEntry.toString())
+                        }
+                        tagName.equals("title", true) -> {
+                            Log.e("insade title", insideEntry.toString())
+                            if (insideEntry) {
+                                title = text
+                                println(title)
+                            }
+                        }
+                        tagName.equals("author", true) -> {
+                            if (insideEntry) {
+                                author = text
+                            }
+                        }
+                        tagName.equals("summary ", true) -> {
+                            if (insideEntry) {
+                                summary = text
+                            }
+                        }
+                        else -> {
+                            listQuestions.add(Questions(title, author, summary))
+                            Log.e("title", title)
+                        }
+                    }
+                    else -> {
+                        if(eventType == XmlPullParser.START_TAG && parser.name.equals("entry", true)) {
+                            insideEntry = false
+                            Log.e("else first", insideEntry.toString())
+                        }
+                    }
+                }
